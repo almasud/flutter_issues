@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  Set<String> selectedTags = Set();
+  Set<Label> selectedTags = Set();
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +45,16 @@ class HomeScreenState extends State<HomeScreen> {
                       runSpacing: -8.0,
                       children: selectedTags.map((tag) {
                         return Chip(
-                          label: Text(tag),
+                          label: Text(tag.name?? ""),
                           deleteIcon: Icon(Icons.cancel),
                           onDeleted: () {
                             setState(() {
-                              selectedTags.remove(tag);
+                              if(tag.isSelected) {
+                                // dummyRepoIssues.map((repoIssue) => {
+                                //   repoIssue.labels!.where((label) => label.id == tag.id).map((e) => e.isSelected = false)
+                                // });
+                                selectedTags.remove(tag);
+                              }
                             });
                           },
                         );
@@ -141,14 +146,16 @@ class HomeScreenState extends State<HomeScreen> {
                                           onSelected: (bool newValue) {
                                             setState(() {
                                               label.isSelected = !label.isSelected;
-                                              selectedTags.addAll(repoIssue.labels!.where((element) => element.isSelected == true).map((e) => e.name!).toSet());
+                                              // updateTags(repoIssue);
+                                              if(label.isSelected) {
+                                                selectedTags.add(label);
+                                              } else {
+                                                selectedTags.remove(label);
+                                              }
                                             });
                                           },
-                                          selected: label.isSelected,
-                                          selectedColor: Colors.lightBlue,
-                                          // onDeleted: () {
-                                          //
-                                          // },
+                                          // selected: label.isSelected,
+                                          // selectedColor: Colors.lightBlue,
                                         )
                                       ],
                                     );

@@ -424,6 +424,15 @@ class Label {
     map['description'] = _description;
     return map;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Label && other.hashCode == hashCode;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name);
+
 }
 
 /// login : "engine-flutter-autoroll"
