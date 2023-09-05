@@ -11,37 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  // final List<Map<String, dynamic>> items = [
-  //   {
-  //     'title': 'Item 1',
-  //     'body': 'This is the body of item 1',
-  //     'author': 'John Doe',
-  //     'date': '2023-09-04',
-  //     'isSelected': false,
-  //   },
-  //   {
-  //     'title': 'Item 2',
-  //     'body': 'This is the body of item 2',
-  //     'author': 'Jane Smith',
-  //     'date': '2023-09-05',
-  //     'isSelected': false,
-  //   },
-  //   // Add more items here...
-  // ];
-
-  // final List<Map<String, dynamic>> labels = [
-  //   {
-  //     'title': 'Label 1',
-  //     'isSelected': false,
-  //   },
-  //   {
-  //     'title': 'Label 2',
-  //     'isSelected': false,
-  //   },
-  //   // Add more items here...
-  // ];
-
-  // bool isSelected = false;
+  Set<String> selectedTags = Set();
 
   @override
   Widget build(BuildContext context) {
@@ -52,102 +22,150 @@ class HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.white,
           title: Text(widget.title),
         ),
-        body: ListView.builder(
-          itemCount: dummyRepoIssues.length,
-          itemBuilder: (BuildContext context, int index) {
-            final repoIssue = dummyRepoIssues[index];
-            return Card(
-              margin: EdgeInsets.all(8.0),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Left Side
-                          Expanded(
-                            child: Column(
+        body: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      // Perform the search action here
+                    },
+                  ),
+                  Expanded(
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: -8.0,
+                      children: selectedTags.map((tag) {
+                        return Chip(
+                          label: Text(tag),
+                          deleteIcon: Icon(Icons.cancel),
+                          onDeleted: () {
+                            setState(() {
+                              selectedTags.remove(tag);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: dummyRepoIssues.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final repoIssue = dummyRepoIssues[index];
+
+                  return Card(
+                    margin: EdgeInsets.all(8.0),
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  repoIssue.title ?? "",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
+                                // Left Side
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        repoIssue.title ?? "",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0,
+                                        ),
+                                        maxLines: 4,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        repoIssue.body ?? "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0,
+                                            color: Colors.grey),
+                                        maxLines: 4,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
-                                  maxLines: 4,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  repoIssue.body ?? "",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0,
-                                      color: Colors.grey),
-                                  maxLines: 4,
-                                  overflow: TextOverflow.ellipsis,
+                                // Right Side
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                        repoIssue.createdAt ?? "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0,
+                                            color: Colors.grey)
+                                    ),
+                                    Text(
+                                        repoIssue.user?.login ?? "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0,
+                                            color: Colors.grey)
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ),
-                          // Right Side
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                  repoIssue.createdAt ?? "",
-                                  style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                  color: Colors.grey)
-                              ),
-                              Text(
-                                  repoIssue.user?.login ?? "",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0,
-                                      color: Colors.grey)
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      // SizedBox(
-                      //   width: size.width,
-                      //   height: 100,
-                      //   child: ListView.builder(
-                      //       itemCount: dummyRepoIssues.where((element) => element.labels != null && element.labels.length > 0)?.length ?? 0,
-                      //       itemBuilder: (BuildContext context, int index) {
-                      //       final label = dummyRepoIssues.where((element) => element.labels != null && element.labels.length > 0)[index] as Label;
-                      //
-                      //         return Row(
-                      //           children: [
-                      //             SizedBox(width: 8,),
-                      //             // Chip(label: Text('Chip $index'), onDeleted: () {}, backgroundColor: Colors.lightBlue,),
-                      //             InputChip(
-                      //                 label: Text(label.name),
-                      //               onSelected: (bool newValue) {
-                      //                 setState(() {
-                      //                   label.isSelected = !label.isSelected;
-                      //                 });
-                      //               },
-                      //               selected: label.isSelected,
-                      //               selectedColor: Colors.lightBlue,
-                      //               onDeleted: () {
-                      //
-                      //               },
-                      //             )
-                      //           ],
-                      //         );
-                      //       },
-                      //       scrollDirection: Axis.horizontal),
-                      // )
-                    ],
-                  )),
-            );
-          },
-        ));
+                            (dummyRepoIssues[index].labels != null)?
+                            SizedBox(
+                              width: size.width,
+                              height: 100,
+                              child: ListView.builder(
+                                  itemCount: dummyRepoIssues[index].labels!.length,
+                                  itemBuilder: (BuildContext context, int i) {
+                                    final label = dummyRepoIssues[index].labels![i];
+
+                                    return Row(
+                                      children: [
+                                        SizedBox(width: 8,),
+                                        // Chip(label: Text('Chip $index'), onDeleted: () {}, backgroundColor: Colors.lightBlue,),
+                                        InputChip(
+                                          label: Text(label.name?? ""),
+                                          onSelected: (bool newValue) {
+                                            setState(() {
+                                              label.isSelected = !label.isSelected;
+                                              selectedTags.addAll(repoIssue.labels!.where((element) => element.isSelected == true).map((e) => e.name!).toSet());
+                                            });
+                                          },
+                                          selected: label.isSelected,
+                                          selectedColor: Colors.lightBlue,
+                                          // onDeleted: () {
+                                          //
+                                          // },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                  scrollDirection: Axis.horizontal),
+                            )
+                                :
+                            Container()
+
+                          ],
+                        )),
+                  );
+                },
+              ),
+            )
+          ],
+        )
+    );
   }
 }

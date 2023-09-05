@@ -349,6 +349,7 @@ class Label {
     String? color,
     bool? defaultProperty,
     String? description,
+    bool isSelected = false,
   }) {
     _id = id;
     _url = url;
@@ -356,6 +357,7 @@ class Label {
     _color = color;
     _defaultProperty = defaultProperty;
     _description = description;
+    _isSelected = isSelected;
   }
 
   Label.fromJson(dynamic json) {
@@ -373,6 +375,7 @@ class Label {
   String? _color;
   bool? _defaultProperty;
   String? _description;
+  bool _isSelected = false;
 
   Label copyWith({
     num? id,
@@ -381,6 +384,7 @@ class Label {
     String? color,
     bool? defaultProperty,
     String? description,
+    bool? isSelected,
   }) =>
       Label(
         id: id ?? _id,
@@ -389,6 +393,7 @@ class Label {
         color: color ?? _color,
         defaultProperty: defaultProperty ?? _defaultProperty,
         description: description ?? _description,
+        isSelected: isSelected ?? _isSelected,
       );
 
   num? get id => _id;
@@ -402,6 +407,12 @@ class Label {
   bool? get defaultProperty => _defaultProperty;
 
   String? get description => _description;
+
+  bool get isSelected => _isSelected;
+
+  set isSelected(bool isSelected) {
+    _isSelected = isSelected;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
