@@ -46,8 +46,8 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                   Expanded(
                     child: Wrap(
-                      spacing: 8.0,
-                      runSpacing: -8.0,
+                      spacing: 8.0, // Horizontal
+                      runSpacing: -2.0, // Vertical
                       children: selectedTags.map((tag) {
                         return Chip(
                           label: Text(tag.name?.toUpperCase() ?? ""),
