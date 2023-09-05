@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_issues/domain/model/repo_issue.dart';
+import 'package:flutter_issues/utils/extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  Set<Label> selectedTags = Set();
+  Set<Label> selectedTags = {};
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,9 @@ class HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(16.0),
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              margin: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(30.0),
@@ -34,7 +36,7 @@ class HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search),
                     onPressed: () {
                       // Perform the search action here
                     },
@@ -45,16 +47,11 @@ class HomeScreenState extends State<HomeScreen> {
                       runSpacing: -8.0,
                       children: selectedTags.map((tag) {
                         return Chip(
-                          label: Text(tag.name?? ""),
-                          deleteIcon: Icon(Icons.cancel),
+                          label: Text(tag.name ?? ""),
+                          deleteIcon: const Icon(Icons.cancel),
                           onDeleted: () {
                             setState(() {
-                              if(tag.isSelected) {
-                                // dummyRepoIssues.map((repoIssue) => {
-                                //   repoIssue.labels!.where((label) => label.id == tag.id).map((e) => e.isSelected = false)
-                                // });
-                                selectedTags.remove(tag);
-                              }
+                              selectedTags.remove(tag);
                             });
                           },
                         );
@@ -71,7 +68,7 @@ class HomeScreenState extends State<HomeScreen> {
                   final repoIssue = dummyRepoIssues[index];
 
                   return Card(
-                    margin: EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.all(8.0),
                     child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -82,89 +79,83 @@ class HomeScreenState extends State<HomeScreen> {
                               children: [
                                 // Left Side
                                 Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    repoIssue.title ?? "",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 16.0,
+                                ),
+                                // Right Side
+                                Expanded(
+                                  flex: 1,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        repoIssue.title ?? "",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0,
-                                        ),
-                                        maxLines: 4,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                          repoIssue.createdAt?.dateTimeFormat(
+                                                  "MM/dd/yyyy") ??
+                                              "",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.0,
+                                              color: Colors.grey)),
                                       Text(
-                                        repoIssue.body ?? "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
-                                            color: Colors.grey),
-                                        maxLines: 4,
+                                        repoIssue.user?.login?.toUpperCase() ??
+                                            "",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                          color: Colors.grey,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
                                 ),
-                                // Right Side
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                        repoIssue.createdAt ?? "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
-                                            color: Colors.grey)
-                                    ),
-                                    Text(
-                                        repoIssue.user?.login ?? "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
-                                            color: Colors.grey)
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
-                            (dummyRepoIssues[index].labels != null)?
-                            SizedBox(
-                              width: size.width,
-                              height: 100,
-                              child: ListView.builder(
-                                  itemCount: dummyRepoIssues[index].labels!.length,
-                                  itemBuilder: (BuildContext context, int i) {
-                                    final label = dummyRepoIssues[index].labels![i];
-
-                                    return Row(
-                                      children: [
-                                        SizedBox(width: 8,),
-                                        // Chip(label: Text('Chip $index'), onDeleted: () {}, backgroundColor: Colors.lightBlue,),
-                                        InputChip(
-                                          label: Text(label.name?? ""),
+                            Text(
+                              repoIssue.body ?? "",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                  color: Colors.grey),
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            (dummyRepoIssues[index].labels != null)
+                                ? SizedBox(
+                                    width: size.width,
+                                    child: Wrap(
+                                      spacing: 8.0, // Horizontal
+                                      runSpacing: 8.0, // Vertical
+                                      children: dummyRepoIssues[index]
+                                          .labels!
+                                          .map((label) {
+                                        return InputChip(
+                                          label: Text(label.name ?? ""),
                                           onSelected: (bool newValue) {
                                             setState(() {
-                                              label.isSelected = !label.isSelected;
-                                              // updateTags(repoIssue);
-                                              if(label.isSelected) {
-                                                selectedTags.add(label);
-                                              } else {
-                                                selectedTags.remove(label);
-                                              }
+                                              selectedTags.add(label);
                                             });
                                           },
                                           // selected: label.isSelected,
                                           // selectedColor: Colors.lightBlue,
-                                        )
-                                      ],
-                                    );
-                                  },
-                                  scrollDirection: Axis.horizontal),
-                            )
-                                :
-                            Container()
-
+                                        );
+                                      }).toList(),
+                                    ),
+                                  )
+                                : Container()
                           ],
                         )),
                   );
@@ -172,7 +163,6 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             )
           ],
-        )
-    );
+        ));
   }
 }
