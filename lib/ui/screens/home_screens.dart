@@ -36,7 +36,10 @@ class HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.search),
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.lightBlueAccent,
+                    ),
                     onPressed: () {
                       // Perform the search action here
                     },
@@ -47,7 +50,15 @@ class HomeScreenState extends State<HomeScreen> {
                       runSpacing: -8.0,
                       children: selectedTags.map((tag) {
                         return Chip(
-                          label: Text(tag.name ?? ""),
+                          label: Text(tag.name?.toUpperCase() ?? ""),
+                          labelStyle: const TextStyle(
+                              color: Colors.lightBlueAccent,
+                              fontWeight: FontWeight.bold),
+                          backgroundColor:
+                              Colors.lightBlueAccent.withOpacity(.2),
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
                           deleteIcon: const Icon(Icons.cancel),
                           onDeleted: () {
                             setState(() {
@@ -143,7 +154,17 @@ class HomeScreenState extends State<HomeScreen> {
                                           .labels!
                                           .map((label) {
                                         return InputChip(
-                                          label: Text(label.name ?? ""),
+                                          label: Text(label.name?.toUpperCase() ?? ""),
+                                          labelStyle: const TextStyle(
+                                              color: Colors.lightBlueAccent,
+                                              fontWeight: FontWeight.bold),
+                                          backgroundColor: Colors
+                                              .lightBlueAccent
+                                              .withOpacity(.2),
+                                          side: BorderSide.none,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
                                           onSelected: (bool newValue) {
                                             setState(() {
                                               selectedTags.add(label);
