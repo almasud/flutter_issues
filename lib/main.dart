@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_issues/ui/strings.dart';
-import 'package:flutter_issues/ui/screens/home_screens.dart';
+import 'package:flutter_issues/ui/route/app_route.dart';
+import 'package:flutter_issues/ui/route/route_path.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(title: Strings.appTitle),
+      onGenerateRoute: AppRoutes.generateRoute,
+      initialRoute: RoutePath.home,
     );
   }
 }
