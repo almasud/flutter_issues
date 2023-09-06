@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 extension StringDateTime on String {
   String dateTimeFormat(String format) {
-    return DateFormat(format).format(DateTime.parse(this)).toString();
+    try {
+      return DateFormat(format).format(DateTime.parse(this)).toString();
+    } catch (e) {
+      debugPrint("dateTimeFormat: exception: ${e.toString()}");
+      return "Invalid";
+    }
   }
 }
