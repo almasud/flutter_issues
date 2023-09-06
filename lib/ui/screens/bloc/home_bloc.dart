@@ -20,7 +20,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc({required this.homeRepo}) : super(const HomeState()) {
     on<FetchIssuesFromRemote>(_onFetchIssuesFromRemote);
-    on<FetchIssuesFromRemoteByLabels>(_onFetchIssuesFromRemoteByLabels);
   }
 
   Future<FutureOr<void>> _onFetchIssuesFromRemote(
@@ -30,47 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     try {
       final response = await homeRepo.getRepoIssues(
-          currentPage: event.currentPage, itemPerPage: event.itemPerPage);
-      emit(
-          state.copyWith(uiStatus: HomeUiStatus.success, repoIssues: response));
-    } on Exception catch (e) {
-      emit(
-          state.copyWith(uiStatus: HomeUiStatus.failed, message: e.toString()));
-    }
-
-    // switch (response) {
-    //   case Success:
-    //     emit(state.copyWith(
-    //         uiStatus: HomeUiStatus.success,
-    //         repoIssues: (response as Success<List<RepoIssue>>).body));
-    //     break;
-    //   case Error:
-    //     emit(state.copyWith(
-    //         uiStatus: HomeUiStatus.failed,
-    //         message: (response as Error).message));
-    //     break;
-    //   case Throwable:
-    //     emit(state.copyWith(
-    //         uiStatus: HomeUiStatus.failed,
-    //         message: (response as Throwable).exception.toString()));
-    //     break;
-    //   default:
-    //     emit(state.copyWith(
-    //         uiStatus: HomeUiStatus.failed,
-    //         message: "Something went wrong!"));
-    // }
-  }
-
-  Future<FutureOr<void>> _onFetchIssuesFromRemoteByLabels(
-      FetchIssuesFromRemoteByLabels event, Emitter<HomeState> emit) async {
-    // Set loading before fetching data from remote
-    emit(state.copyWith(uiStatus: HomeUiStatus.loading));
-
-    try {
-      final response = await homeRepo.getRepoIssues(
-          currentPage: event.currentPage,
-          itemPerPage: event.itemPerPage,
-          labels: event.labels.join(','));
+          currentPage: event.currentPage, labels: event.labels.join(','));
       emit(
           state.copyWith(uiStatus: HomeUiStatus.success, repoIssues: response));
     } on Exception catch (e) {
@@ -78,4 +37,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           state.copyWith(uiStatus: HomeUiStatus.failed, message: e.toString()));
     }
   }
+
+  // switch (response) {
+  //   case Success:
+  //     emit(state.copyWith(
+  //         uiStatus: HomeUiStatus.success,
+  //         repoIssues: (response as Success<List<RepoIssue>>).body));
+  //     break;
+  //   case Error:
+  //     emit(state.copyWith(
+  //         uiStatus: HomeUiStatus.failed,
+  //         message: (response as Error).message));
+  //     break;
+  //   case Throwable:
+  //     emit(state.copyWith(
+  //         uiStatus: HomeUiStatus.failed,
+  //         message: (response as Throwable).exception.toString()));
+  //     break;
+  //   default:
+  //     emit(state.copyWith(
+  //         uiStatus: HomeUiStatus.failed,
+  //         message: "Something went wrong!"));
+  // }
+
 }

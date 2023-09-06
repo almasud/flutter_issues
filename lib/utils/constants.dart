@@ -5,5 +5,6 @@
  */
 
 abstract class Constants {
-  static const String baseUrl = "api.github.com";
+  static const String baseUrl = "https://api.github.com";
+  static const int itemPerPage = 10;
 }

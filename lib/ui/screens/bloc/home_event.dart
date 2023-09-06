@@ -12,25 +12,11 @@ abstract class HomeEvent extends Equatable {
 
 class FetchIssuesFromRemote extends HomeEvent {
   const FetchIssuesFromRemote(
-      {required this.currentPage, this.itemPerPage = 20});
+      {required this.currentPage, this.labels = const []});
 
   final int currentPage;
-  final int itemPerPage;
-
-  @override
-  List<Object?> get props => [currentPage, itemPerPage];
-}
-
-class FetchIssuesFromRemoteByLabels extends HomeEvent {
-  const FetchIssuesFromRemoteByLabels(
-      {required this.currentPage,
-      this.itemPerPage = 20,
-      this.labels = const []});
-
-  final int currentPage;
-  final int itemPerPage;
   final List<String> labels;
 
   @override
-  List<Object?> get props => [currentPage, itemPerPage, labels];
+  List<Object?> get props => [currentPage, labels];
 }

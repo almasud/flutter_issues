@@ -8,5 +8,5 @@ import 'package:flutter_issues/domain/model/repo_issue.dart';
 
 abstract class HomeRepo {
   // Future<NetworkResult<List<RepoIssue>>> getRepoIssues({required int currentPage, int itemPerPage});
-  Future<List<RepoIssue>> getRepoIssues({required int currentPage, int itemPerPage, String labels});
+  Future<List<RepoIssue>> getRepoIssues({required int currentPage, String labels});
 }

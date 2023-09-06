@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_issues/ui/route/app_route.dart';
 import 'package:flutter_issues/ui/route/route_path.dart';
 
-void main() {
+import 'data/di/app_component.dart';
+
+Future<void> main() async {
+  await AppComponent().init();
   runApp(const MyApp());
 }
 
