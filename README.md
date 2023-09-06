@@ -13,7 +13,7 @@ A Flutter project that shows the Flutter issues from Github Flutter repository.
 </p>
 
 <p align="center">
-  <a target="_blank" href="https://github.com/almasud/flutter_issues/blob/master/apk/flutter_issues.apk">
+  <a target="_blank" href="https://github.com/almasud/flutter_issues/raw/master/apk/flutter_issues.apk">
     <img width="220" height="90" src="https://github.com/almasud/almasud.github.io/raw/master/projects/augmented_learn/images/direct_apk_download.png" alt="App direct download button"/>
   </a>
 </p>
