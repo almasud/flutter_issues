@@ -19,7 +19,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
               create: (context) => HomeBloc(homeRepo: HomeRepoImpl())
-                ..add(const FetchRepoIssuesFromRemote(currentPage: 1)),
+                ..add(const FetchIssuesFromRemote(currentPage: 1)),
               child: const HomeScreen(title: Strings.appTitle)),
         );
       default:

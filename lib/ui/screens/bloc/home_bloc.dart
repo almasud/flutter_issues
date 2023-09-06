@@ -19,11 +19,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepo homeRepo;
 
   HomeBloc({required this.homeRepo}) : super(const HomeState()) {
-    on<FetchRepoIssuesFromRemote>(_onFetchRepoIssuesFromRemote);
+    on<FetchIssuesFromRemote>(_onFetchIssuesFromRemote);
+    on<FetchIssuesFromRemoteByLabels>(_onFetchIssuesFromRemoteByLabels);
   }
 
-  Future<FutureOr<void>> _onFetchRepoIssuesFromRemote(
-      FetchRepoIssuesFromRemote event, Emitter<HomeState> emit) async {
+  Future<FutureOr<void>> _onFetchIssuesFromRemote(
+      FetchIssuesFromRemote event, Emitter<HomeState> emit) async {
     // Set loading before fetching data from remote
     emit(state.copyWith(uiStatus: HomeUiStatus.loading));
 
@@ -58,5 +59,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //         uiStatus: HomeUiStatus.failed,
     //         message: "Something went wrong!"));
     // }
+  }
+
+  Future<FutureOr<void>> _onFetchIssuesFromRemoteByLabels(
+      FetchIssuesFromRemoteByLabels event, Emitter<HomeState> emit) async {
+    // Set loading before fetching data from remote
+    emit(state.copyWith(uiStatus: HomeUiStatus.loading));
+
+    try {
+      final response = await homeRepo.getRepoIssues(
+          currentPage: event.currentPage,
+          itemPerPage: event.itemPerPage,
+          labels: event.labels.join(','));
+      emit(
+          state.copyWith(uiStatus: HomeUiStatus.success, repoIssues: response));
+    } on Exception catch (e) {
+      emit(
+          state.copyWith(uiStatus: HomeUiStatus.failed, message: e.toString()));
+    }
   }
 }

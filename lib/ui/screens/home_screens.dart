@@ -45,6 +45,11 @@ class HomeScreenState extends State<HomeScreen> {
                     ),
                     onPressed: () {
                       // Perform the search action here
+                      context.read<HomeBloc>().add(
+                          FetchIssuesFromRemoteByLabels(
+                              currentPage: 1,
+                              labels:
+                                  selectedTags.map((e) => e.name!).toList()));
                     },
                   ),
                   Expanded(
@@ -66,6 +71,12 @@ class HomeScreenState extends State<HomeScreen> {
                           onDeleted: () {
                             setState(() {
                               selectedTags.remove(tag);
+                              context.read<HomeBloc>().add(
+                                  FetchIssuesFromRemoteByLabels(
+                                      currentPage: 1,
+                                      labels: selectedTags
+                                          .map((e) => e.name!)
+                                          .toList()));
                             });
                           },
                         );
@@ -164,8 +175,8 @@ class HomeScreenState extends State<HomeScreen> {
                                               child: Wrap(
                                                 spacing: 8.0, // Horizontal
                                                 runSpacing: 8.0, // Vertical
-                                                children: state.repoIssues![index]
-                                                    .labels!
+                                                children: state
+                                                    .repoIssues![index].labels!
                                                     .map((label) {
                                                   return InputChip(
                                                     label: Text(label.name
@@ -190,6 +201,13 @@ class HomeScreenState extends State<HomeScreen> {
                                                         (bool newValue) {
                                                       setState(() {
                                                         selectedTags.add(label);
+                                                        context.read<HomeBloc>().add(
+                                                            FetchIssuesFromRemoteByLabels(
+                                                                currentPage: 1,
+                                                                labels: selectedTags
+                                                                    .map((e) =>
+                                                                        e.name!)
+                                                                    .toList()));
                                                       });
                                                     },
                                                     // selected: label.isSelected,
