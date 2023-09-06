@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// url : "https://api.github.com/repos/flutter/flutter/issues/133997"
 /// repository_url : "https://api.github.com/repos/flutter/flutter"
 /// html_url : "https://github.com/flutter/flutter/pull/133997"
@@ -207,6 +209,12 @@ final dummyRepoIssues = [
       body:
           "\nhttps://github.com/flutter/engine/compare/fbc6f4a54047...90fec635e4fb\n\n2023-09-04 skia-flutter-autoroll@skia.org Roll Dart SDK from a5c7102af509 to 671cf059e4b6 (1 revision) (flutter/engine#45429)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Fuchsia Mac SDK from ynBQWN3XpE2JvSlfd... to A82pOZ3-NNgfJ2Da7... (flutter/engine#45428)\n2023-09-04 skia-flutter-autoroll@skia.org Roll ANGLE from 1fb536394148 to ab9bbb9b11b3 (1 revision) (flutter/engine#45426)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Skia from 5eaf624077b5 to c9d527e6b535 (1 revision) (flutter/engine#45425)\n2023-09-04 skia-flutter-autoroll@skia.org Roll ANGLE from ebf1e7163216 to 1fb536394148 (1 revision) (flutter/engine#45424)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Skia from 906dcd219276 to 5eaf624077b5 (1 revision) (flutter/engine#45423)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Skia from 4d0501380011 to 906dcd219276 (1 revision) (flutter/engine#45422)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Skia from 15f77147a3ec to 4d0501380011 (1 revision) (flutter/engine#45421)\n2023-09-04 skia-flutter-autoroll@skia.org Roll Fuchsia Mac SDK from p56hmQk2lEbN-VwEg... to ynBQWN3XpE2JvSlfd... (flutter/engine#45420)\n\nAlso rolling transitive DEPS:\n  fuchsia/sdk/core/mac-amd64 from p56hmQk2lEbN to A82pOZ3-NNgf\n\nIf this roll has caused a breakage, revert this CL and stop the roller\nusing the controls here:\nhttps://autoroll.skia.org/r/flutter-engine-flutter-autoroll\nPlease CC aaclarke@google.com,rmistry@google.com,zra@google.com on the revert to ensure that a human\nis aware of the problem.\n\nTo file a bug in Flutter: https://github.com/flutter/flutter/issues/new/choose\n\nTo report a problem with the AutoRoller itself, please file a bug:\nhttps://bugs.chromium.org/p/skia/issues/entry?template=Autoroller+Bug\n\nDocumentation for the AutoRoller is here:\nhttps://skia.googlesource.com/buildbot/+doc/main/autoroll/README.md\n"),
 ];
+
+List<RepoIssue> repoIssuesFromJson(String str) =>
+    List<RepoIssue>.from(json.decode(str).map((x) => RepoIssue.fromJson(x)));
+
+String repoIssueToJson(List<RepoIssue> data) =>
+    json.encode(List<RepoIssue>.from(data.map((x) => x.toJson())));
 
 class RepoIssue {
   RepoIssue({

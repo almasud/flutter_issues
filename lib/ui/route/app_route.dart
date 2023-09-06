@@ -5,7 +5,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_issues/data/repo/home_repo_impl.dart';
 import 'package:flutter_issues/ui/route/route_path.dart';
+import 'package:flutter_issues/ui/screens/bloc/home_bloc.dart';
 import 'package:flutter_issues/ui/screens/home_screens.dart';
 import 'package:flutter_issues/ui/strings.dart';
 
@@ -14,7 +17,11 @@ class AppRoutes {
     switch (routeSettings.name) {
       case RoutePath.home:
         return MaterialPageRoute(
-            builder: (_) => const HomeScreen(title: Strings.appTitle));
+          builder: (_) => BlocProvider(
+              create: (context) => HomeBloc(homeRepo: HomeRepoImpl())
+                ..add(const FetchRepoIssuesFromRemote(currentPage: 1)),
+              child: const HomeScreen(title: Strings.appTitle)),
+        );
       default:
         return MaterialPageRoute(
             builder: (BuildContext context) => Scaffold(
