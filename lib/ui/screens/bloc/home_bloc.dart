@@ -8,6 +8,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_issues/data/model/network_result.dart';
 import 'package:flutter_issues/domain/model/repo_issue.dart';
 import 'package:flutter_issues/domain/repo/home_repo.dart';
 
@@ -27,37 +28,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // Set loading before fetching data from remote
     emit(state.copyWith(uiStatus: HomeUiStatus.loading));
 
-    try {
-      final response = await homeRepo.getRepoIssues(
-          currentPage: event.currentPage, labels: event.labels.join(','));
-      emit(
-          state.copyWith(uiStatus: HomeUiStatus.success, repoIssues: response));
-    } on Exception catch (e) {
-      emit(
-          state.copyWith(uiStatus: HomeUiStatus.failed, message: e.toString()));
+    final response = await homeRepo.getRepoIssues(
+        currentPage: event.currentPage, labels: event.labels.join(','));
+
+    switch (response) {
+      case Success():
+        emit(state.copyWith(
+            uiStatus: HomeUiStatus.success,
+            repoIssues: repoIssuesFromJson((response).body)));
+        break;
+      case Error():
+        emit(state.copyWith(
+            uiStatus: HomeUiStatus.failed, message: (response).message));
+        break;
+      case Throwable():
+        emit(state.copyWith(
+            uiStatus: HomeUiStatus.failed,
+            message: (response).exception.toString()));
+        break;
+      default:
+        emit(state.copyWith(
+            uiStatus: HomeUiStatus.failed, message: "Something went wrong!"));
     }
   }
-
-  // switch (response) {
-  //   case Success:
-  //     emit(state.copyWith(
-  //         uiStatus: HomeUiStatus.success,
-  //         repoIssues: (response as Success<List<RepoIssue>>).body));
-  //     break;
-  //   case Error:
-  //     emit(state.copyWith(
-  //         uiStatus: HomeUiStatus.failed,
-  //         message: (response as Error).message));
-  //     break;
-  //   case Throwable:
-  //     emit(state.copyWith(
-  //         uiStatus: HomeUiStatus.failed,
-  //         message: (response as Throwable).exception.toString()));
-  //     break;
-  //   default:
-  //     emit(state.copyWith(
-  //         uiStatus: HomeUiStatus.failed,
-  //         message: "Something went wrong!"));
-  // }
-
 }
