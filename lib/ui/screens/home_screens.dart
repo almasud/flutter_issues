@@ -22,7 +22,7 @@ class HomeScreenState extends State<HomeScreen> {
   final _homeBloc = getIt<HomeBloc>();
   int _currentPage = 0;
 
-  //*initialize page controller
+  // Initialize page controller
   final PagingController<int, RepoIssue> _pagingController =
       PagingController(firstPageKey: 0);
 
@@ -129,6 +129,7 @@ class HomeScreenState extends State<HomeScreen> {
                       _pagingController.appendPage(repoIssues, nextPageKey);
                     }
                   } else if (state.uiStatus == HomeUiStatus.failed) {
+                    debugPrint("HomeScreen failed: ${state.message}");
                     _pagingController.error = state.message;
                   }
                 },
